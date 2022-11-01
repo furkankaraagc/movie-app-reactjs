@@ -1,10 +1,19 @@
+import { Route, Routes } from "react-router-dom";
+import { useMovieContext } from "./context/MovieContext";
+import { useEffect, lazy, Suspense } from "react";
 import "../src/style/app.css";
-import { useEffect } from "react";
 import MovieList from "./components/MovieList";
 import Navbar from "./components/Navbar";
-import { useMovieContext } from "./context/MovieContext";
 import Carousels from "./components/Carousel";
 import Footer from "./components/Footer";
+
+// const Watchlist = lazy(() => import("./components/Watchlist"));
+// const Details = lazy(() => import("./components/Details"));
+// const AllTvSeries = lazy(() => import("./components/AllTvSeries"));
+
+import Watchlist from "./components/Watchlist";
+import Details from "./components/Details";
+import AllTvSeries from "./components/AllTvSeries";
 
 const App = () => {
   const {
@@ -15,8 +24,7 @@ const App = () => {
     searched,
     page,
     setTopRated,
-    isLoading,
-    setIsLoading,
+    setSeries,
   } = useMovieContext();
   const apiKey = process.env.REACT_APP_ACCESS_KEY;
   const baseUrl = "https://api.themoviedb.org/3/";
@@ -32,6 +40,17 @@ const App = () => {
       .then((data) => set(data.results))
       .catch((err) => console.log(err));
     console.log("fetch1..");
+  };
+
+  const fetchTvSeries = () => {
+    fetch(`${baseUrl}/tv/popular?api_key=${apiKey}&language=en-US`)
+      .then((res) => {
+        if (res.ok && res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => setSeries(data.results))
+      .catch((err) => console.log(err));
   };
 
   const fetchMovies = (set) => {
@@ -51,7 +70,6 @@ const App = () => {
         set(popular && !searchKey ? [...popular, data.results] : data.results)
       )
       .catch((err) => console.log(err));
-    setIsLoading(isLoading + 1);
 
     console.log("fetch2..");
   };
@@ -59,24 +77,73 @@ const App = () => {
   useEffect(() => {
     fetchTopRated(setTopRated);
   }, []);
+
+  useEffect(() => {
+    fetchTvSeries();
+  }, []);
+
   useEffect(() => {
     fetchMovies(setPopular);
   }, [page]);
+
   useEffect(() => {
-    searchKey && fetchMovies(setSearched);
+    !searchKey && searched && setSearched([]);
+    //if I'm typing faster than half second then wait half second and fetch the data.
+    const getData = setTimeout(() => {
+      searchKey && fetchMovies(setSearched);
+    }, 250);
+
+    return () => {
+      clearTimeout(getData);
+    };
   }, [searchKey]);
 
-  console.log(searched);
   console.log("app rendred");
+
   return (
     <div className="app">
-      <Navbar apiImg={apiImg} fetchMovies={fetchMovies} />
-      <div className="header">
-        <Carousels apiImg={apiImg} />
-      </div>
-      <div className="main">
-        <MovieList popular={popular} apiImg={apiImg} />
-      </div>
+      <Suspense fallback={<p>loading......</p>}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar apiImg={apiImg} fetchMovies={fetchMovies} />
+                <Carousels apiImg={apiImg} />
+                <MovieList popular={popular} apiImg={apiImg} />
+              </>
+            }
+          />
+          <Route
+            path="/watchlist"
+            element={
+              <Watchlist baseUrl={baseUrl} apiKey={apiKey} apiImg={apiImg} />
+            }
+          />
+          <Route
+            path="/details"
+            element={
+              <Details
+                fetchMovies={fetchMovies}
+                baseUrl={baseUrl}
+                apiKey={apiKey}
+                apiImg={apiImg}
+              />
+            }
+          />
+          <Route
+            path="tvseries"
+            element={
+              <AllTvSeries
+                fetchMovies={fetchMovies}
+                baseUrl={baseUrl}
+                apiKey={apiKey}
+                apiImg={apiImg}
+              />
+            }
+          />
+        </Routes>
+      </Suspense>
       <Footer />
     </div>
   );

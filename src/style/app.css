@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  text-decoration: none;
+  text-decoration: none !important;
   outline: none;
 }
 
@@ -54,6 +54,10 @@ li {
   background-color: #222831;
   color: white;
 }
+.navbar .watchlist {
+  display: flex;
+  gap: 10px;
+}
 .navbar .autocomplete {
   position: absolute;
   width: 400px;
@@ -74,13 +78,45 @@ li {
   display: flex;
   cursor: pointer;
 }
-
-.carousel {
-  width: 800px;
-  margin: 20px auto;
+.navbar .focus-out {
+  display: none;
 }
-.carousel img {
+
+.header {
+  display: flex;
+  max-width: 1400px;
+  margin: 30px auto;
+  gap: 30px;
+  color: white;
+}
+.header .carousel {
+  min-width: 800px;
+}
+.header .carousel img {
   filter: brightness(50%);
+}
+.header .tv-series {
+  width: 100%;
+  color: white;
+}
+.header .tv-series img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  width: 130px;
+}
+.header .tv-series ul {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  gap: 10px;
+}
+.header .tv-series ul li {
+  display: flex;
+  gap: 20px;
+}
+.header .tv-series ul li .tv-detail p {
+  overflow: hidden;
+  height: 100px;
 }
 
 .main {
@@ -88,25 +124,12 @@ li {
   max-width: 1400px;
   margin: 30px auto;
 }
-.main .movie-list {
+.main .movie-list,
+.main .tv-list {
   color: white;
 }
-.main .movie-list .card-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  height: 100%;
-  width: 100%;
-}
-.main .movie-list .card-skeleton .image-skeleton {
-  width: 100%;
-  height: 100%;
-}
-.main .movie-list .card-skeleton .text-skeleton {
-  height: 100%;
-  width: 100%;
-}
-.main .movie-list ul {
+.main .movie-list ul,
+.main .tv-list ul {
   margin-top: 20px;
   width: 100%;
   display: grid;
@@ -114,52 +137,79 @@ li {
   gap: 20px;
   padding: 0;
 }
-.main .movie-list ul li {
+.main .movie-list ul li,
+.main .tv-list ul li {
   background-color: #393e46;
   max-width: 300px;
   text-align: center;
   border-radius: 0 0 5px 5px;
   cursor: pointer;
 }
-.main .movie-list ul li .details {
+.main .movie-list ul li .details,
+.main .tv-list ul li .details {
   font-size: 18px;
   height: 130px;
 }
-.main .movie-list ul li .details .movie-rate {
+.main .movie-list ul li .details .movie-rate,
+.main .movie-list ul li .details .tv-rate,
+.main .tv-list ul li .details .movie-rate,
+.main .tv-list ul li .details .tv-rate {
   display: flex;
   margin-left: 20px;
   margin-top: 10px;
 }
-.main .movie-list ul li .details .movie-name {
+.main .movie-list ul li .details .movie-name,
+.main .movie-list ul li .details .tv-name,
+.main .tv-list ul li .details .movie-name,
+.main .tv-list ul li .details .tv-name {
   display: flex;
   margin-left: 20px;
   height: 30px;
   text-align: start;
 }
-.main .movie-list ul li .details button {
+.main .movie-list ul li .details button,
+.main .tv-list ul li .details button {
   padding: 5px 10px;
   background-color: #222831;
   color: white;
   margin-top: 25px;
 }
-.main .movie-list ul li img {
+.main .movie-list ul li .details button:hover,
+.main .tv-list ul li .details button:hover {
+  opacity: 0.8;
+}
+.main .movie-list ul li img,
+.main .tv-list ul li img {
   -o-object-fit: contain;
      object-fit: contain;
   height: auto;
   width: 100%;
 }
-.main .movie-list .load-more {
+.main .movie-list ul li img:hover,
+.main .tv-list ul li img:hover {
+  opacity: 0.9;
+}
+.main .movie-list .load-more,
+.main .tv-list .load-more {
   width: 1400px;
   display: flex;
   justify-content: center;
 }
-.main .movie-list .load-more .load-more-btn {
+.main .movie-list .load-more .load-more-btn,
+.main .tv-list .load-more .load-more-btn {
   background-color: #393e46;
   padding: 10px 20px;
   color: white;
   font-size: 20px;
   margin: 20px 0;
   border-radius: 5px;
+}
+
+.more-detail {
+  color: white;
+}
+.more-detail .about-the-movie {
+  min-width: 3000px;
 }
 
 .footer {

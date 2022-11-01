@@ -3,9 +3,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  text-decoration: none;
+  text-decoration: none !important;
   outline: none;
 }
+
 body {
   color: white;
   height: 100%;
@@ -52,6 +53,10 @@ li {
       color: white;
     }
   }
+  .watchlist {
+    display: flex;
+    gap: 10px;
+  }
   .autocomplete {
     position: absolute;
     width: 400px;
@@ -73,12 +78,45 @@ li {
       cursor: pointer;
     }
   }
+  .focus-out {
+    display: none;
+  }
 }
-.carousel {
-  width: 800px;
-  margin: 20px auto;
-  img {
-    filter: brightness(50%);
+.header {
+  display: flex;
+  max-width: 1400px;
+  margin: 30px auto;
+  gap: 30px;
+  color: white;
+  .carousel {
+    min-width: 800px;
+    img {
+      filter: brightness(50%);
+    }
+  }
+  .tv-series {
+    width: 100%;
+    color: white;
+    img {
+      object-fit: contain;
+      width: 130px;
+    }
+    ul {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      gap: 10px;
+      li {
+        display: flex;
+        gap: 20px;
+        .tv-detail {
+          p {
+            overflow: hidden;
+            height: 100px;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -87,23 +125,9 @@ li {
   max-width: 1400px;
   margin: 30px auto;
 
-  .movie-list {
+  .movie-list,
+  .tv-list {
     color: white;
-    .card-skeleton {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      height: 100%;
-      width: 100%;
-      .image-skeleton {
-        width: 100%;
-        height: 100%;
-      }
-      .text-skeleton {
-        height: 100%;
-        width: 100%;
-      }
-    }
 
     ul {
       margin-top: 20px;
@@ -122,12 +146,14 @@ li {
         .details {
           font-size: 18px;
           height: 130px;
-          .movie-rate {
+          .movie-rate,
+          .tv-rate {
             display: flex;
             margin-left: 20px;
             margin-top: 10px;
           }
-          .movie-name {
+          .movie-name,
+          .tv-name {
             display: flex;
             margin-left: 20px;
             height: 30px;
@@ -139,12 +165,18 @@ li {
             background-color: #222831;
             color: white;
             margin-top: 25px;
+            &:hover {
+              opacity: 0.8;
+            }
           }
         }
         img {
           object-fit: contain;
           height: auto;
           width: 100%;
+          &:hover {
+            opacity: 0.9;
+          }
         }
       }
     }
@@ -161,6 +193,12 @@ li {
         border-radius: 5px;
       }
     }
+  }
+}
+.more-detail {
+  color: white;
+  .about-the-movie {
+    min-width: 3000px;
   }
 }
 .footer {

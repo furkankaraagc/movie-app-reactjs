@@ -1,24 +1,29 @@
-import Skeleton from "react-loading-skeleton";
+import { NavLink } from "react-router-dom";
 import { useMovieContext } from "../context/MovieContext";
 
 const AutoComplete = ({ apiImg, isTyping }) => {
-  const { searched } = useMovieContext();
-  console.log("autocomplete");
+  const { searched, setDetailId, inputFocus } = useMovieContext();
 
   return (
     <>
       {isTyping && (
-        <div className="autocomplete">
+        <div ref={inputFocus} className="autocomplete">
           {searched.map((search) => (
-            <div key={search.id} className="searched-list">
-              <img src={apiImg + search.poster_path} alt="" />
-              <div>
-                <div>{search.title}</div>
+            <NavLink to="/details">
+              <div
+                onClick={(e) => setDetailId(e.target.id)}
+                key={search.id}
+                className="searched-list"
+              >
+                <img id={search.id} src={apiImg + search.poster_path} alt="" />
                 <div>
-                  {search.release_date && search.release_date.substring(0, 4)}
+                  <div id={search.id}> {search.title}</div>
+                  <div id={search.id}>
+                    {search.release_date && search.release_date.substring(0, 4)}
+                  </div>
                 </div>
               </div>
-            </div>
+            </NavLink>
           ))}
         </div>
       )}
