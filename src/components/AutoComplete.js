@@ -1,8 +1,19 @@
 import { NavLink } from "react-router-dom";
 import { useMovieContext } from "../context/MovieContext";
+import allURLs from "../allURLs";
+import useAxios from "../useAxios";
 
-const AutoComplete = ({ apiImg, isTyping }) => {
-  const { searched, setDetailId, inputFocus } = useMovieContext();
+const AutoComplete = ({ isTyping }) => {
+  const {
+    searched,
+    setDetailId,
+    inputFocus,
+
+    setSearched,
+    apiImg,
+  } = useMovieContext();
+
+  const [] = useAxios(allURLs.search, setSearched);
 
   return (
     <>
@@ -13,9 +24,14 @@ const AutoComplete = ({ apiImg, isTyping }) => {
               <div
                 onClick={(e) => setDetailId(e.target.id)}
                 key={search.id}
-                className="searched-list"
+                className="searched-list "
               >
-                <img id={search.id} src={apiImg + search.poster_path} alt="" />
+                <img
+                  className="fade-in"
+                  id={search.id}
+                  src={apiImg + search.poster_path}
+                  alt=""
+                />
                 <div>
                   <div id={search.id}> {search.title}</div>
                   <div id={search.id}>

@@ -1,34 +1,41 @@
-import Navbar from "./Navbar";
 import { useMovieContext } from "../context/MovieContext";
 import { useEffect } from "react";
+import Navbar from "./Navbar";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import axios from "axios";
+import allURLs from "../allURLs";
 
-const Watchlist = ({ baseUrl, apiKey, apiImg }) => {
-  const { watchlistId, watchListData, setListData, setSearchKey } =
-    useMovieContext();
+const Watchlist = () => {
+  const {
+    watchlistId,
+    watchListData,
+    setListData,
+    setSearchKey,
+    apiImg,
+    setWatchlistId,
+  } = useMovieContext();
 
   setSearchKey("");
+
+  const deleteMovie = (movie) => {
+    const filteredData = watchListData.filter((data) => data.id !== movie.id);
+    const filteredId = watchlistId.filter((id) => parseInt(id) !== movie.id);
+
+    setListData(filteredData);
+    setWatchlistId(filteredId);
+  };
 
   useEffect(() => {
     watchlistId.length !== watchListData.length &&
       watchlistId.map((item) => {
         !watchListData.map((x) => x.id).includes(parseInt(item)) &&
-          fetch(`${baseUrl}/movie/${item}?api_key=${apiKey}&language=en-US`)
-            .then((res) => {
-              if (res.ok && res.status === 200) {
-                return res.json();
-              }
-            })
-
-            .then((data) => setListData((prev) => [...prev, data]))
-            .catch((err) => console.log(err));
+          axios
+            .get(
+              `${allURLs.baseUrl}/movie/${item}?api_key=${allURLs.apiKey}&language=en-US`
+            )
+            .then((res) => setListData((prev) => [...prev, res.data]));
       });
   }, []);
-
-  // const x = [1, 2];
-  // const y = [{ id: 1 }, { id: 5 }];
-
-  // console.log(x.map((a) => y.map((x) => x.id).includes(a)));
 
   return (
     <>
@@ -39,6 +46,12 @@ const Watchlist = ({ baseUrl, apiKey, apiImg }) => {
             {watchListData &&
               watchListData.map((movie) => (
                 <li key={movie.id}>
+                  <div
+                    onClick={() => deleteMovie(movie)}
+                    className="delete-btn"
+                  >
+                    Delete
+                  </div>
                   <img src={apiImg + movie.poster_path} alt="" />
                   <div className="details">
                     <div className="front-detail">

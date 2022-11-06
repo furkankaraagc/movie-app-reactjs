@@ -1,32 +1,34 @@
-import { useEffect } from "react";
 import { useMovieContext } from "../context/MovieContext";
 import Navbar from "./Navbar";
+import useAxios from "../useAxios";
+import allURLs from "../allURLs";
 
-const Details = ({ baseUrl, apiKey, apiImg }) => {
-  const { detailId, moreDetail, setMoreDetail, setSearchKey, fetchMovies } =
-    useMovieContext();
-  console.log("detail");
+const Details = () => {
+  const {
+    detailId,
+    moreDetail,
+    setMoreDetail,
+    setSearchKey,
+    fetchMovies,
+    setDetailId,
+    apiImg,
+  } = useMovieContext();
+  const url = `${allURLs.baseUrl}/movie/${detailId}?api_key=${allURLs.apiKey}&language=en-US`;
 
-  useEffect(() => {
-    fetch(`${baseUrl}/movie/${detailId}?api_key=${apiKey}&language=en-US`)
-      .then((res) => {
-        if (res.ok && res.status === 200) {
-          return res.json();
-        }
-      })
+  const [] = useAxios(url, setMoreDetail);
 
-      .then((data) => setMoreDetail(data))
-      .catch((err) => console.log(err));
-    setSearchKey("");
-  }, [detailId]);
+  setDetailId("");
+  setSearchKey("");
 
   return (
     <div className="more-detail">
       <Navbar apiImg={apiImg} fetchMovies={fetchMovies} />
       <div className="about-the-movie">
         <h3>{moreDetail.title}</h3>
-        <img src={apiImg + moreDetail.backdrop_path} alt="" />
-        <p>{moreDetail.overview}</p>
+        <div className="details">
+          <img src={apiImg + moreDetail.backdrop_path} alt="" />
+          <p>{moreDetail.overview}</p>
+        </div>
       </div>
     </div>
   );

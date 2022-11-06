@@ -1,10 +1,23 @@
 import { useMovieContext } from "../context/MovieContext";
+import { NavLink } from "react-router-dom";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import AddIcon from "@mui/icons-material/Add";
-import { Link, NavLink } from "react-router-dom";
+import useAxios from "../useAxios";
+import allURLs from "../allURLs";
+import MovieListSk from "./Skeleton";
 
-const MovieList = ({ popular, apiImg }) => {
-  const { setPage, page, setWatchlistId, setDetailId } = useMovieContext();
+const MovieList = () => {
+  const {
+    setPage,
+    page,
+    setWatchlistId,
+    setDetailId,
+    setPopular,
+    apiImg,
+    popular,
+    isLoading,
+  } = useMovieContext();
+  const [] = useAxios(allURLs.popular, setPopular, page);
 
   const addWatchlist = (e) => {
     setWatchlistId((prev) =>
@@ -16,40 +29,53 @@ const MovieList = ({ popular, apiImg }) => {
     <div className="main">
       <div className="movie-list">
         <h2>Popular Movies</h2>
-
-        <ul>
-          {popular && (
-            <>
-              {popular.flat().map((movie) => (
-                <li key={movie.id}>
-                  <NavLink to="/details">
-                    <img
-                      id={movie.id}
-                      onClick={(e) => setDetailId(e.target.id)}
-                      src={apiImg + movie.poster_path}
-                      alt=""
-                    />
-                  </NavLink>
-                  <div className="details">
-                    <div className="front-detail">
-                      <div className="movie-rate">
-                        <StarBorderIcon />
-                        {movie.vote_average}
+        {isLoading ? (
+          <div className="movie-list-container">
+            <MovieListSk type="movie-list" />
+          </div>
+        ) : (
+          <ul>
+            {popular && (
+              <>
+                {popular.flat().map((movie) => (
+                  <li key={movie.id} className="fade-in">
+                    <NavLink to="/details">
+                      <img
+                        id={movie.id}
+                        onClick={(e) => setDetailId(e.target.id)}
+                        src={apiImg + movie.poster_path}
+                        alt=""
+                      />
+                    </NavLink>
+                    <div className="details">
+                      <div className="front-detail">
+                        <div className="movie-rate">
+                          <StarBorderIcon />
+                          {movie.vote_average}
+                        </div>
+                        <div className="movie-name">{movie.title}</div>
                       </div>
-                      <div className="movie-name">{movie.title}</div>
-                    </div>
 
-                    <button id={movie.id} onClick={addWatchlist}>
-                      <AddIcon /> Watchlist
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </>
-          )}
-        </ul>
+                      <button
+                        className="watchlist"
+                        id={movie.id}
+                        onClick={addWatchlist}
+                      >
+                        <AddIcon /> Watchlist
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </>
+            )}
+          </ul>
+        )}
+
         <div className="load-more">
-          <button className="load-more-btn" onClick={() => setPage(page + 1)}>
+          <button
+            className="load-more-btn"
+            onClick={() => setPage((prev) => prev + 1)}
+          >
             Load more
           </button>
         </div>

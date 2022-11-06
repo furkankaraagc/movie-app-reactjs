@@ -9,7 +9,6 @@
 
 body {
   color: white;
-  height: 100%;
 }
 
 button {
@@ -18,10 +17,6 @@ button {
 
 .app {
   background-color: #222831;
-}
-
-li {
-  list-style: none;
 }
 
 .navbar {
@@ -123,6 +118,7 @@ li {
   display: flex;
   max-width: 1400px;
   margin: 30px auto;
+  min-height: 100vh;
 }
 .main .movie-list,
 .main .tv-list {
@@ -143,7 +139,27 @@ li {
   max-width: 300px;
   text-align: center;
   border-radius: 0 0 5px 5px;
+  position: relative;
   cursor: pointer;
+}
+.main .movie-list ul li:hover .delete-btn,
+.main .tv-list ul li:hover .delete-btn {
+  visibility: visible;
+  opacity: 1;
+}
+.main .movie-list ul li .delete-btn,
+.main .tv-list ul li .delete-btn {
+  transition: 0.3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1;
+  position: absolute;
+  background-color: red;
+  cursor: pointer;
+  height: 50px;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
 }
 .main .movie-list ul li .details,
 .main .tv-list ul li .details {
@@ -178,6 +194,11 @@ li {
 .main .tv-list ul li .details button:hover {
   opacity: 0.8;
 }
+.main .movie-list ul li .details button:active,
+.main .tv-list ul li .details button:active {
+  opacity: 0.5;
+  padding: 3px 7px;
+}
 .main .movie-list ul li img,
 .main .tv-list ul li img {
   -o-object-fit: contain;
@@ -209,10 +230,89 @@ li {
   color: white;
 }
 .more-detail .about-the-movie {
+  padding: 30px;
   min-width: 3000px;
+  min-height: 100vh;
+}
+.more-detail .about-the-movie .details {
+  display: flex;
+  gap: 20px;
 }
 
 .footer {
   background-color: #393e46;
   height: 200px;
+}
+
+.skeleton-tv {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.skeleton-tv .skeleton-card {
+  display: flex;
+  gap: 20px;
+}
+.skeleton-tv .skeleton-card .image {
+  background-color: #393e46;
+  width: 130px;
+  height: 200px;
+}
+.skeleton-tv .skeleton-card h3 {
+  background-color: #393e46;
+  width: 300px;
+  height: 30px;
+}
+.skeleton-tv .skeleton-card p {
+  background-color: #393e46;
+  width: 400px;
+  height: 100px;
+}
+
+.carousel-image {
+  width: 800px;
+  height: 450px;
+  background-color: #393e46;
+}
+
+.movie-list-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+.movie-list-container .card {
+  background-color: #222831;
+}
+.movie-list-container .card .image {
+  width: 264px;
+  height: 396px;
+  background-color: #393e46;
+}
+.movie-list-container .card .details {
+  margin-top: 10px;
+  width: 264px;
+  height: 50px;
+  background-color: #393e46;
+}
+
+.fade-in {
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }/*# sourceMappingURL=app.css.map */

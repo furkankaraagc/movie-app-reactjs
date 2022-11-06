@@ -13,8 +13,11 @@ const Provider = ({ children }) => {
   const [detailId, setDetailId] = useState("");
   const [moreDetail, setMoreDetail] = useState("");
   const [series, setSeries] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const inputFocus = useRef("");
+
+  const apiImg = "https://image.tmdb.org/t/p/w500/";
 
   const data = {
     popular,
@@ -38,6 +41,9 @@ const Provider = ({ children }) => {
     series,
     setSeries,
     inputFocus,
+    apiImg,
+    isLoading,
+    setIsLoading,
   };
   return <Context.Provider value={data}>{children}</Context.Provider>;
 };
